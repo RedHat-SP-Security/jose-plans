@@ -1,0 +1,28 @@
+# used in
+# https://gitlab.com/redhat/centos-stream/rpms/jose/-/tree/c10s
+summary: test plan for jose gating testing
+
+
+prepare:
+  - how: shell
+    script:
+     - systemctl disable --now dnf-makecache.service || true
+     - systemctl disable --now dnf-makecache.timer || true
+     - dnf makecache
+
+discover:
+  - name: Upstream_tests_clevis
+    how: fmf
+    url: https://github.com/RedHat-SP-Security/clevis-tests
+    ref: master
+    filter: tag:CI-Tier-1
+  - name: Upstream_tests_jose
+    how: fmf
+    url: https://github.com/RedHat-SP-Security/jose-tests
+    ref: master
+    filter: tag:CI-Tier-1
+
+
+execute:
+    how: tmt
+
